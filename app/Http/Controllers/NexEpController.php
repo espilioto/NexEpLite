@@ -34,6 +34,7 @@ class NexEpController extends Controller
         if (!empty($show)) {
             $showData = array(
                 'showID' => $show->id,
+                'showTvmazeUrl' => $show->url,
                 'showName' => $show->name,
                 'showStatus' => $show->status,
                 'showPic' => $show->image->medium,
@@ -68,6 +69,7 @@ class NexEpController extends Controller
         $show = new Show;
         $show->showid = $request['showID'];
         $show->name = $request['showName'];
+        $show->tvmazeUrl = $request['showTvmazeUrl'];
         $show->airstamp = $request['nextEpTimestamp'];
 
         $show->save();
@@ -80,5 +82,10 @@ class NexEpController extends Controller
         $show->delete();
 
         return redirect('/');
+    }
+
+    private function updateAirstampColumn () 
+    {
+
     }
 }

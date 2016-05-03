@@ -12,12 +12,8 @@ class CreateShowsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shows', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('showid');
-            $table->string('name');
-            $table->string('airstamp');
-            $table->timestamps();
+        Schema::table('shows', function (Blueprint $table) {
+            $table->string('tvmazeUrl');
         });
     }
 

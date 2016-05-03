@@ -53,7 +53,7 @@
                             <button type="submit" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-trash"></span></button>
                         {{ Form::close() }} 
                         <!-- show info -->
-                        {{ $show->name }}
+                        <a href= "{{ $show->tvmazeUrl }}" >{{ $show->name }}</a>
                         <div>{{ date('F d, Y H:i', strtotime($show->airstamp)) }}</div>
                         <hr>
                     @endforeach
@@ -89,7 +89,7 @@
                     Episode {{ $nextEpData['nextEpNumber'] }}<br>
                     NextEp: {{ date('F d, Y H:i', strtotime($nextEpData['nextEpTimestamp'])) }} (LT)<br><br>
                     <!-- add button -->
-                    {{ Form::open(array('action' => array('NexEpController@store', 'showName' => $showData['showName'], 'showID' => $showData['showID'], 'nextEpTimestamp' => $nextEpData['nextEpTimestamp']))) }}
+                    {{ Form::open(array('action' => array('NexEpController@store', 'showID' => $showData['showID'], 'showTvmazeUrl' => $showData['showTvmazeUrl'], 'showName' => $showData['showName'], 'nextEpTimestamp' => $nextEpData['nextEpTimestamp']))) }}
                         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add to watchlist</button>
                     {{ Form::close() }} <br>
                 @else
