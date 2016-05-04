@@ -12,6 +12,8 @@ class NexEpController extends Controller
 
 	public function index ()
     {
+        // $this->updateAirstampColumn(); //this should be a cronjob
+
         $shows = Show::orderBy('airstamp', 'asc')->get();
     	
         return view('welcome', [
@@ -58,7 +60,7 @@ class NexEpController extends Controller
             $nextEpData = 'No future episode data found';
         }
 
-        //get the existing show and pass them to the view so it doesnt blow up
+        //get the existing shows and pass them to the view so it updates
         $shows = Show::orderBy('created_at', 'asc')->get();
 
         return view('welcome', compact('showData', 'nextEpData', 'shows'));
@@ -84,8 +86,28 @@ class NexEpController extends Controller
         return redirect('/');
     }
 
+    //updates the DB column where the next episode timestamp is stored
+    //this should be a cron job and update like once a day or something
+    // 
+    //https://laravel.com/docs/5.1/scheduling
+    //http://www.sitepoint.com/managing-cronjobs-with-laravel/
+    //https://github.com/liebig/cron
     private function updateAirstampColumn () 
     {
+        $shows = Show::get();
+        $showUrl = $nexEpUrl = $showResponse = $nexEpResponse = "";
 
+        foreach ($shows as $show) {
+            $showUrl = 'http://api.tvmaze.com/shows/' . $show->showid; 
+            @$showResponse = json_decode(file_get_contents($showUrl, true));
+            
+            $nexEpUrl = $showResponse->_links->nextepisode->href;
+            @$nexEpResponse = json_decode(file_get_contents($nexEpUrl, true));
+
+            if (!$nexEpResponse->airstamp == $show->airstamp) {
+                $show->update(array("airstamp" => $nexEpResponse->airstamp));
+            }
+        }
     }
+
 }
