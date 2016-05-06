@@ -87,11 +87,17 @@
                     <h4>Next episode info</h4> <br>
                     Season {{ $nextEpData['nextEpSeason'] }}<br>
                     Episode {{ $nextEpData['nextEpNumber'] }}<br>
-                    NextEp: {{ date('F d, Y H:i', strtotime($nextEpData['nextEpTimestamp'])) }} (LT)<br><br>
-                    <!-- add button -->
-                    {{ Form::open(array('action' => array('NexEpController@store', 'showID' => $showData['showID'], 'showTvmazeUrl' => $showData['showTvmazeUrl'], 'showName' => $showData['showName'], 'nextEpTimestamp' => $nextEpData['nextEpTimestamp']))) }}
-                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add to watchlist</button>
+                    NextEp: {{ date('F d, Y H:i', strtotime($nextEpData['nextEpTimestamp'])) }}<br><br>
+                    <!-- add button check -->
+                    @if($exists)
+                    {{ Form::open() }}
+                        <button type="button" disabled="disabled" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Show already added</button>
                     {{ Form::close() }} <br>
+                    @else
+                        {{ Form::open(array('action' => array('NexEpController@store', 'showID' => $showData['showID'], 'showTvmazeUrl' => $showData['showTvmazeUrl'], 'showName' => $showData['showName'], 'nextEpTimestamp' => $nextEpData['nextEpTimestamp']))) }}
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add to watchlist</button>
+                        {{ Form::close() }} <br>
+                    @endif
                 @else
                     <br> {{ $nextEpData }} 
                 @endif

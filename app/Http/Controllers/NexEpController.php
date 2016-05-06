@@ -41,6 +41,12 @@ class NexEpController extends Controller
                 'showStatus' => $show->status,
                 'showPic' => $show->image->medium,
             );
+            //if the show exists in the watchlist, disable the add button
+            if (Show::where('showid', $show->id)->count()) {
+                $exists = true;
+            } else {
+                $exists = false;
+            }        
         } else {
             $showData = 'No show found';
         }
@@ -63,7 +69,7 @@ class NexEpController extends Controller
         //get the existing shows and pass them to the view so it updates
         $shows = Show::orderBy('created_at', 'asc')->get();
 
-        return view('welcome', compact('showData', 'nextEpData', 'shows'));
+        return view('welcome', compact('showData', 'nextEpData', 'shows', 'exists'));
     }
 
     public function store (Request $request)
